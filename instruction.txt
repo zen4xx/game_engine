@@ -19,7 +19,6 @@ MoveObject(name, pos) - to move object
 DrawObject(name) - to draw object if the object has been removed from the drawing cycle
 DoNotDrawObject(name) - to remove object from drawing cycle
 IsKeyPresed(key) - check key state
-RotateObject(name, matrix) - comming soon
 
 Camera:
 SetCameraPos(pos) - set camera pos
