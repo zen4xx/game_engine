@@ -83,6 +83,12 @@ public:
 	///</summary>
     MeshData CreateSphere(float radius, uint32 sliceCount, uint32 stackCount);
 
+
+	///<summary>
+	/// Creates a SkyShpher
+	///</summary>
+	MeshData CreateSkySphere(float radius, uint32 sliceCount, uint32 stackCount);
+
 	///<summary>
 	/// Creates a geosphere centered at the origin with the given radius.  The
 	/// depth controls the level of tessellation.

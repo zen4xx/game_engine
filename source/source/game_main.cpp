@@ -21,20 +21,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
     try
     {
         Game_engine Game(hInstance);
-        Game.LoadTexture(L"../../Textures/white.dds", "white");
-        Game.LoadTexture(L"../../Textures/stone.dds", "stone");
+        Game.LoadTexture(L"../../Textures/cat.dds", "cat");
+        Game.LoadTexture(L"../../Textures/snow.dds", "sky");
+
         if (!Game.Initialize())
             return 0;
 
+        GeometryGenerator gg;
         ObjLoader loader;
-        Mesh msh = loader.LoadObj("../../Models/cat.obj");
-        Mesh msh2 = loader.LoadObj("../../Models/monkey.obj");
-        loader.get_error();
-        Game.CreateMaterial("mat", (XMFLOAT4)Colors::Gold, (XMFLOAT3)Colors::White, 0.02f, "white");
-        Game.CreateMaterial("mat2", (XMFLOAT4)Colors::White, (XMFLOAT3)Colors::White, 0.02f, "stone");
 
+        Mesh msh = loader.LoadObj("../../Models/cat.obj");
+        GeometryGenerator::MeshData sky = gg.CreateSkySphere(100, 20, 20);
+        loader.get_error();
+
+        Game.CreateMaterial("mat", (XMFLOAT4)Colors::White, (XMFLOAT3)Colors::White, 0.02f, "cat");
+        Game.CreateMaterial("sky", (XMFLOAT4)Colors::White, (XMFLOAT3)Colors::Black, 10, "sky");
+
+        Game.CreateGeometry(sky, XMFLOAT3(0, 0, 0), "sky", "sky");   
         Game.CreateGeometry(msh, XMFLOAT3(0, 0, 0), "mat", "cat");
-        Game.CreateGeometry(msh2, XMFLOAT3(3, 0, 0), "mat2", "monkey");
+
         Game.CreateWorld();
         MSG msg = { 0 };
         mTimer.Reset();
@@ -42,7 +47,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
         Game.CameraWalk(-4);
         Game.SetAmbient(XMFLOAT4(0.4f,0.4f,0.6f,1.f));
         Game.SetLight(XMFLOAT3(0.7f, -0.5f, 0.4f), XMFLOAT3(0.6f,0.5f,0.5f));
-        //Game.DoNotDrawObject("monkey");
+
         while (msg.message != WM_QUIT)
         {
             // If there are Window messages then process them.
@@ -56,6 +61,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
             {
                 //chip
                 Game.MoveObject("cat", XMMatrixRotationY(mTimer.TotalTime()));
+                Game.MoveObject("sky", XMMatrixTranslation(Game.GetCameraPos().x, Game.GetCameraPos().y, Game.GetCameraPos().z));
                 update(Game);
             }
         }
